@@ -1,7 +1,7 @@
 FROM centos:7
 LABEL maintainer="Tony Vo <tonyvo@wustl.edu>"
  
-# Prerequisites
+## Prerequisites
 RUN yum -y update && \
     yum -y --enablerepo=extras install epel-release && \
     yum groupinstall -y "Development tools" && \
@@ -31,6 +31,7 @@ RUN yum -y update && \
 # SET up variables used by the build process
     EB_VER=4.6.0
  
+## Install easybuild
 # Easybuild does not install as root.
 RUN useradd easybuild && \
     mkdir -p /opt/versions && chown easybuild:easybuild /opt/versions
@@ -39,7 +40,7 @@ WORKDIR /home/easybuild
  
 RUN pip install easybuild==$EB_VER
  
-# Create a helper script to setup environment
+## Create a helper script to setup environment
 # PYTHONHTTPSVERIFY=0 is for disabling the HTTPS verify
 RUN echo "source /opt/lmod/lmod/init/bash" > /home/easybuild/setup.sh && \
   echo "module use /opt/versions/2022.9/$(uname | tr A-Z a-z)/$(uname -p)/intel/cascadelake/modules/all" >> /home/easybuild/setup.sh && \
