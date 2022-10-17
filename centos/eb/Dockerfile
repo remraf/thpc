@@ -1,7 +1,7 @@
 FROM centos:7
 LABEL maintainer="Tony Vo <tonyvo@wustl.edu>"
  
-# Prerequisites for Easybuild and LMOD
+# Prerequisites
 RUN yum -y update && \
     yum -y --enablerepo=extras install epel-release && \
     yum groupinstall -y "Development tools" && \
