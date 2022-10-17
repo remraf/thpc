@@ -1,5 +1,6 @@
 FROM centos:7
 LABEL maintainer="Tony Vo <tonyvo@wustl.edu>"
+ARG EB_VERSION=4.6.1
  
 ## Prerequisites
 RUN yum -y update && \
@@ -28,9 +29,6 @@ RUN yum -y update && \
     which  && \
     yum clean -y all
  
-# SET up variables used by the build process
-    EB_VER=4.6.0
- 
 ## Install easybuild
 # Easybuild does not install as root.
 RUN useradd easybuild && \
@@ -38,7 +36,7 @@ RUN useradd easybuild && \
  
 WORKDIR /home/easybuild
  
-RUN pip install easybuild==$EB_VER
+RUN pip install easybuild==$EB_VERSION
  
 ## Create a helper script to setup environment
 # PYTHONHTTPSVERIFY=0 is for disabling the HTTPS verify
