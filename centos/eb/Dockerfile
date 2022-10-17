@@ -30,13 +30,11 @@ RUN yum -y update && \
     yum clean -y all
  
 ## Install easybuild
-# Easybuild does not install as root.
+# Easybuild does not install as root
 RUN useradd easybuild && \
     mkdir -p /opt/versions && chown easybuild:easybuild /opt/versions
- 
 WORKDIR /home/easybuild
- 
-RUN pip install easybuild==$EB_VERSION
+RUN pip3 install easybuild==$EB_VERSION
  
 ## Create a helper script to setup environment
 # PYTHONHTTPSVERIFY=0 is for disabling the HTTPS verify
