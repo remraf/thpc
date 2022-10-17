@@ -2,26 +2,30 @@ FROM centos:7
 LABEL maintainer="Tony Vo <tonyvo@wustl.edu>"
  
 # Prerequisites for Easybuild and LMOD
-RUN yum -y --enablerepo=extras install epel-release && \
-  yum groupinstall -y "Development tools" && \
-  yum install -y \
-    which \
+RUN yum -y update && \
+    yum -y --enablerepo=extras install epel-release && \
+    yum groupinstall -y "Development tools" && \
+    yum install -y \
     libibverbs-dev \
     libibverbs-devel \
+    libopenssl-devel \
+    libssl-dev \
     lua \
     lua-posix \
     lua-filesystem \
     lua-devel \
-    tcl \
-    python-pip \
-    python-wheel \
+    ncurses \
+    ncurses-devel \
     openssl \
     openssl-devel \
-    libssl-dev \
-    libopenssl-devel \
+    python3 \
+    python3-pip \
+    python3-wheel \
     shadow-utils \
-    squashfs-tools && \
-  yum clean -y all
+    squashfs-tools \
+    tcl \
+    which  && \
+    yum clean -y all
  
 # SET up variables used by the build process
 ENV LMOD_VER=8.7.12 \
