@@ -10,6 +10,7 @@ RUN yum -y update && \
     libibverbs-devel \
     libopenssl-devel \
     libssl-dev \
+    Lmod \
     lua \
     lua-posix \
     lua-filesystem \
@@ -28,19 +29,7 @@ RUN yum -y update && \
     yum clean -y all
  
 # SET up variables used by the build process
-ENV LMOD_VER=8.7.12 \
     EB_VER=4.6.0
- 
-# Install LMOD
-WORKDIR /tmp/build
-RUN curl -LO http://github.com/TACC/Lmod/archive/${LMOD_VER}.tar.gz && \
-    tar xvf ${LMOD_VER}.tar.gz > /dev/null && \
-    cd Lmod-${LMOD_VER} && \
-    ./configure --prefix=/opt --with-fastTCLInterp=no && \
-    make install && \
-    ln -s /opt/lmod/lmod/init/profile /etc/profile.d/modules.sh && \
-    ln -s /opt/lmod/lmod/init/cshrc /etc/profile.d/modules.csh && \
-    rm -r /tmp/build/*
  
 # Easybuild does not install as root.
 RUN useradd easybuild && \
