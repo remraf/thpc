@@ -1,6 +1,5 @@
 FROM centos:7
- 
-LABEL MAINTAINER="Shin Leong <sleong@wustl.edu>"
+LABEL maintainer="Tony Vo <tonyvo@wustl.edu>"
  
 # Prerequisites for Easybuild and LMOD
 RUN yum -y --enablerepo=extras install epel-release && \
