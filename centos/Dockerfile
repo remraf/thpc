@@ -48,4 +48,4 @@ RUN export PATH=$TMPDIR/bin:$PATH && \
     export EB_PYTHON=$EB_PYTHON && \
     source /etc/profile.d/00-modulepath.sh && \
     source /usr/share/lmod/8.7.7/init/profile && \
-    eb --install-latest-eb-release --prefix $EB_DIR/.local
+    eb --prefix $EB_DIR/.local EasyBuild-$EB_VERSION.eb -r
