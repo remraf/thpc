@@ -37,12 +37,15 @@ RUN yum -y update && \
     yum clean -y all
 
 ## Install easybuild
-# Easybuild does not install as root
 RUN useradd $USERNAME && \
     mkdir -p $APP_DIR && chown $USERNAME:$USERNAME $APP_DIR && \
     python3 -m pip install --ignore-installed --prefix=$TMPDIR easybuild 
+RUN cat <<EOF > /etc/profile.d/z01_eb.sh
+export PYTHONHTTPSVERIFY=0
+module use $EB_DIR/.local/modules/all
+EOF
+# Install Easybuild as non-root user
 USER easybuild
-WORKDIR $EB_DIR
 RUN export PATH=$TMPDIR/bin:$PATH && \
     export PYTHONPATH=$(/bin/ls -rtd -1 $TMPDIR/lib*/python*/site-packages | tail -1):$PYTHONPATH && \
     export EB_PYTHON=$EB_PYTHON && \
