@@ -10,8 +10,11 @@ ARG EB_INSTALLPATH="/opt/thpc/${APP_PERIOD}/$(uname | tr '[:upper:]' '[:lower:]'
 ARG EB_MODULES="$EB_DIR/.local/easybuild/modules/all"
 ARG EB_PYTHON=python3
 ARG EB_VERSION=4.6.1
+ARG SPACK_VERSION=0.18.1
 ARG TMPDIR=/tmp/easybuild 
 ARG USERNAME=easybuild
+ENV SPACK_INSTALLPATH="/opt/versions/${APP_VERSION}/$(uname | tr A-Z a-z)/$(uname -p)/intel/cascadelake/spack"
+ENV SPACK_ROOT=/opt/spack
  
 ## Prerequisites
 RUN yum -y update && \
@@ -39,6 +42,14 @@ RUN yum -y update && \
         tcl \
         which  && \
     yum clean -y all
+
+## Install spack
+WORKDIR /opt
+RUN curl -LO https://github.com/spack/spack/releases/download/v${SPACK_VERSION}/spack-${SPACK_VERSION}.tar.gz && \
+    tar -xvzf spack-${SPACK_VERSION}.tar.gz && \
+    rm -rf spack-${SPACK_VERSION}.tar.gz && \
+    mv spack-${SPACK_VERSION} spack && \
+    ln -s /opt/spack/share/spack/setup-env.sh /etc/profile.d/spack-env.sh
 
 ## Install easybuild
 # Configure easybuild
