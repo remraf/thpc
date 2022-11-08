@@ -13,8 +13,6 @@ ARG EB_VERSION=4.6.1
 ARG SPACK_VERSION=0.18.1
 ARG TMPDIR=/tmp/easybuild 
 ARG USERNAME=easybuild
-ENV SPACK_INSTALLPATH="/opt/versions/${APP_VERSION}/$(uname | tr A-Z a-z)/$(uname -p)/intel/cascadelake/spack"
-ENV SPACK_ROOT=/opt/spack
  
 ## Prerequisites
 RUN yum -y update && \
@@ -49,7 +47,14 @@ RUN curl -LO https://github.com/spack/spack/releases/download/v${SPACK_VERSION}/
     tar -xvzf spack-${SPACK_VERSION}.tar.gz && \
     rm -rf spack-${SPACK_VERSION}.tar.gz && \
     mv spack-${SPACK_VERSION} spack && \
-    ln -s /opt/spack/share/spack/setup-env.sh /etc/profile.d/spack-env.sh
+    ln -s /opt/spack/share/spack/setup-env.sh /etc/profile.d/z03_spack-env.sh && \
+    cat <<EOF > /etc/profile.d/z02_spack.sh
+export SPACK_INSTALLPATH="/opt/versions/${APP_VERSION}/$(uname | tr A-Z a-z)/$(uname -p)/intel/cascadelake/spack"
+export SPACK_ROOT=/opt/spack
+module use /opt/versions/2022.9/$(uname | tr A-Z a-z)/$(uname -p)/intel/cascadelake/spack/lmod/modules/Core
+EOF
+COPY /spack/config.yaml /opt/spack/etc/spack/config.yaml
+COPY /spack/modules.yaml /etc/spack/modules.yaml
 
 ## Install easybuild
 # Configure easybuild
@@ -76,4 +81,4 @@ RUN export PATH=$TMPDIR/bin:$PATH && \
 installpath = $INSTALLPATH
 EOF
 
-User root
+USER root
