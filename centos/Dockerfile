@@ -44,23 +44,25 @@ RUN yum -y update && \
 # Configure easybuild
 RUN useradd $USERNAME && \
     mkdir -p $APP_DIR $EB_CONFIGDIR && chown $USERNAME:$USERNAME $APP_DIR $EB_CONFIGDIR && \
-    python3 -m pip install --ignore-installed --prefix=$TMPDIR easybuild 
-RUN cat <<EOF > /etc/profile.d/z01_eb.sh
+    python3 -m pip install --ignore-installed --prefix=$TMPDIR easybuild && \
+    cat <<EOF > /etc/profile.d/z01_eb.sh
 export PYTHONHTTPSVERIFY=0
 module use $EB_MODULES
 module use ${EB_INSTALLPATH}/modules/all
 module load EasyBuild/$EB_VERSION
 EOF
 # Install Easybuild as non-root user
-USER easybuild
+User easybuild
 RUN export PATH=$TMPDIR/bin:$PATH && \
     export PYTHONPATH=$(/bin/ls -rtd -1 $TMPDIR/lib*/python*/site-packages | tail -1):$PYTHONPATH && \
     export EB_PYTHON=$EB_PYTHON && \
     source /etc/profile.d/00-modulepath.sh && \
     source /usr/share/lmod/8.7.7/init/profile && \
-    eb EasyBuild-$EB_VERSION.eb -r
-RUN INSTALLPATH="/opt/thpc/${APP_PERIOD}/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -p)/intel/cascadelake/easybuild" && \
-cat <<EOF > /home/easybuild/.config/easybuild/config.cfg
+    eb EasyBuild-$EB_VERSION.eb -r && \
+    INSTALLPATH="/opt/thpc/${APP_PERIOD}/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -p)/intel/cascadelake/easybuild" && \ 
+    cat <<EOF > $EB_CONFIG
 [config]
 installpath = $INSTALLPATH
 EOF
+
+User root
