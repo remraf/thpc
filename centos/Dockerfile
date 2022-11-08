@@ -2,12 +2,12 @@
 FROM centos:7
 LABEL maintainer="Tony Vo <tonyvo@wustl.edu>" 
 ARG APP_DIR=/opt/thpc
+ARG APP_PERIOD=2022.9
 ARG EB_CONFIG=/home/easybuild/.config/easybuild/config.cfg
 ARG EB_CONFIGDIR=/home/easybuild/.config/easybuild
 ARG EB_DIR=/home/easybuild
-ARG EB_INSTALLPATH="/opt/thpc/${EB_PERIOD}/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -p)/intel/cascadelake"
+ARG EB_INSTALLPATH="/opt/thpc/${APP_PERIOD}/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -p)/intel/cascadelake"
 ARG EB_MODULES="$EB_DIR/.local/easybuild/modules/all"
-ARG EB_PERIOD=2022.9
 ARG EB_PYTHON=python3
 ARG EB_VERSION=4.6.1
 ARG TMPDIR=/tmp/easybuild 
@@ -59,7 +59,7 @@ RUN export PATH=$TMPDIR/bin:$PATH && \
     source /etc/profile.d/00-modulepath.sh && \
     source /usr/share/lmod/8.7.7/init/profile && \
     eb EasyBuild-$EB_VERSION.eb -r
-RUN INSTALLPATH="/opt/thpc/${EB_PERIOD}/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -p)/intel/cascadelake" && \
+RUN INSTALLPATH="/opt/thpc/${APP_PERIOD}/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -p)/intel/cascadelake" && \
 cat <<EOF > /home/easybuild/.config/easybuild/config.cfg
 [config]
 installpath = $INSTALLPATH
