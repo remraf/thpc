@@ -68,7 +68,7 @@ module use ${EB_INSTALLPATH}/modules/all
 module load EasyBuild/$EB_VERSION
 EOF
 # Install Easybuild as non-root user
-User easybuild
+USER easybuild
 RUN export PATH=$TMPDIR/bin:$PATH && \
     export PYTHONPATH=$(/bin/ls -rtd -1 $TMPDIR/lib*/python*/site-packages | tail -1):$PYTHONPATH && \
     export EB_PYTHON=$EB_PYTHON && \
@@ -82,3 +82,4 @@ installpath = $INSTALLPATH
 EOF
 
 USER root
+WORKDIR /
