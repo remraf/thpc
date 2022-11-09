@@ -49,7 +49,7 @@ RUN curl -LO https://github.com/spack/spack/releases/download/v${SPACK_VERSION}/
     mv spack-${SPACK_VERSION} spack && \
     ln -s /opt/spack/share/spack/setup-env.sh /etc/profile.d/z03_spack-env.sh && \
     cat <<EOF > /etc/profile.d/z02_spack.sh
-export SPACK_INSTALLPATH="/opt/versions/${APP_VERSION}/$(uname | tr A-Z a-z)/$(uname -p)/intel/cascadelake/spack"
+export SPACK_INSTALLPATH="/opt/versions/${APP_VERSION}/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -p)/intel/cascadelake/spack"
 export SPACK_ROOT=/opt/spack
 module use /opt/versions/2022.9/$(uname | tr A-Z a-z)/$(uname -p)/intel/cascadelake/spack/lmod/modules/Core
 EOF
