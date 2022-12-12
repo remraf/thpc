@@ -10,7 +10,7 @@ ARG EB_INSTALLPATH="/opt/thpc/${APP_PERIOD}/$(uname | tr '[:upper:]' '[:lower:]'
 ARG EB_MODULES="$EB_DIR/.local/easybuild/modules/all"
 ARG EB_PYTHON=python3
 ARG EB_VERSION=4.6.1
-ARG SPACK_VERSION=0.18.1
+ARG SPACK_VERSION=0.19.0
 ARG TMPDIR=/tmp/easybuild 
 ARG USERNAME=easybuild
  
@@ -46,7 +46,7 @@ WORKDIR /opt
 RUN curl -LO https://github.com/spack/spack/releases/download/v${SPACK_VERSION}/spack-${SPACK_VERSION}.tar.gz && \
     tar -xvzf spack-${SPACK_VERSION}.tar.gz && \
     rm -rf spack-${SPACK_VERSION}.tar.gz && \
-    mv spack-${SPACK_VERSION} spack && \
+    ln -s spack-${SPACK_VERSION} spack && \
     ln -s /opt/spack/share/spack/setup-env.sh /etc/profile.d/z03_spack-env.sh && \
     cat <<EOF > /etc/profile.d/z02_spack.sh
 export SPACK_INSTALLPATH="/opt/versions/${APP_VERSION}/$(uname | tr '[:upper:]' '[:lower:]')/$(uname -p)/intel/cascadelake/spack"
