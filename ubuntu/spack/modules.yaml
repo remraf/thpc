@@ -1,0 +1,26 @@
+# -------------------------------------------------------------------------
+# This is the default configuration for Spack's module file generation.
+#
+# Settings here are versioned with Spack and are intended to provide
+# sensible defaults out of the box. Spack maintainers should edit this
+# file to keep it current.
+#
+# Users can override these settings by editing the following files.
+#
+# Per-spack-instance settings (overrides defaults):
+#   $SPACK_ROOT/etc/spack/modules.yaml
+#
+# Per-user settings (overrides default and site settings):
+#   ~/.spack/modules.yaml
+# -------------------------------------------------------------------------
+# double colon tells spack to override all module settings applied before this file
+modules::
+  # These are configurations for the module set named "default"
+  default:
+    # Where to install modules
+    roots:
+      lmod: ${SPACK_INSTALLPATH}/lmod/modules
+    arch_folder: false
+    # What type of modules to use
+    enable:
+      - lmod
