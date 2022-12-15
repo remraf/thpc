@@ -82,4 +82,13 @@ RUN apt update && \
         tzdata \
         unzip \
         zip && \        
-    apt clean all
+    apt clean all && \
+    cat <<EOF >> /root/.profile
+# Source global definitions
+if [[ -f /etc/profile ]]
+then
+    source /etc/profile
+fi
+EOF
+
+
