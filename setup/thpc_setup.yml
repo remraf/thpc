@@ -1,0 +1,50 @@
+---
+- name: Set up hosts for THPC environment
+  hosts: LSF_Servers
+  vars:
+    PUBLIC_LINK: /opt/thpc
+    STORAGE_ROOT: /scratch1/fs1/ris/thpc
+
+  tasks:
+    
+    # Add THPC environment variables
+    - name: Set THPC_ARCH environment variable
+      ansible.builtin.lineinfile:
+        dest: /etc/profile.d/environment.sh
+        state: present
+        regexp: "THPC_ARCH="
+        line: "export THPC_ARCH={{ ansible_architecture }}"
+        create: true
+        mode: '0644'
+    - name: Define THPC_VENDOR environment variable
+      ansible.builtin.shell:
+        cmd: grep -m1 -Eo 'Intel|AMD' /proc/cpuinfo | tr [:upper:] [:lower:]
+      check_mode: false
+      register: THPC_VENDOR
+    - name: Set THPC_VENDOR environment variable
+      ansible.builtin.lineinfile:
+        dest: /etc/profile.d/environment.sh
+        state: present
+        regexp: "THPC_VENDOR="
+        line: "export THPC_VENDOR={{ THPC_VENDOR.stdout }}"
+    - name: Define THPC_MICRO environment variable
+      ansible.builtin.shell: >
+        /usr/bin/inxi -c 0  -x -C
+        | grep -Po '(?<=arch: )[^:]+(?=\s+\S+:|$)' 
+        | tr [:upper:] [:lower:] 
+        | tr -d ' '
+      check_mode: false
+      register: THPC_MICRO
+    - name: Set THPC_MICRO environment variable
+      ansible.builtin.lineinfile:
+        dest: /etc/profile.d/environment.sh
+        state: present
+        regexp: "THPC_MICRO="
+        line: "export THPC_MICRO={{ THPC_MICRO.stdout }}"
+    # Add THPC public link
+    - name: Create symbolic link to THPC repo
+      ansible.builtin.file:
+        state: link
+        src: "{{ STORAGE_ROOT }}"
+        dest: "{{ PUBLIC_LINK }}"
+        force: yes 

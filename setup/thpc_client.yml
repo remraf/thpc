@@ -1,0 +1,31 @@
+- name: Set up clients for THPC environment
+  hosts: LSF_Clients
+  vars:
+    BIN_DIR: /opt/thpc/bin
+    ENV_FILE: /etc/profile.d/environment.sh
+    STORAGE_ROOT: /scratch1/fs1/ris/thpc/bin
+
+  tasks:
+    # Add THPC binary directory to user PATH
+    - name: Create environment file in /etc/profile.d
+      ansible.builtin.file:
+        state: touch
+        path: "{{ ENV_FILE }}"
+        mode: '0644'
+    - name: Add THPC binary directory to user PATH
+      ansible.builtin.lineinfile:
+        dest: "{{ ENV_FILE }}"
+        state: present
+        regexp: "PATH="
+        line: "export PATH={{ BIN_DIR }}:$PATH"
+    # Create binary directory symlink
+    - name: Create THPC directory
+      ansible.builtin.file:
+        state: directory
+        path: /opt/thpc
+    - name: Create symbolic link to THPC binaries
+      ansible.builtin.file:
+        state: link
+        src: "{{ STORAGE_ROOT }}"
+        path: "{{ BIN_DIR }}"
+        force: true
